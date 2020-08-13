@@ -1,0 +1,73 @@
+﻿<Page
+    x:Class="SMSDesktopUWP.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Style="{StaticResource PageStyle}"
+    xmlns:syncfusion="using:Syncfusion.UI.Xaml.Charts"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Image Source="/Assets/SplashScreen-100.scale-150.png" Height="200" Width="200"/>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="Life For Children Ministry"
+                   VerticalAlignment="Center"
+                   Foreground="#FF4472C4"
+                   FontSize="50"
+                   HorizontalAlignment="Center"/>
+                <TextBlock Text="Social Management System"
+                       VerticalAlignment="Center"
+                       Foreground="Black"
+                       FontSize="32"
+                       HorizontalAlignment="Center"/>
+            </StackPanel>
+
+        </StackPanel>
+
+
+        <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}"
+          Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" x:Name="stackOrphanStats">
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1" Grid.Column="2" x:Name="stackNarrationStats">
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="1" x:Name="stackOrphanContactStats">
+                <TextBlock FontSize="20" VerticalAlignment="Center"
+                    Margin="0,150,0,20"
+                    Width="300"
+                    Height="300"
+                    TextWrapping="Wrap"
+                    Text="Contact Frequency Statistics (% Orphans within last 6 months)"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="2" x:Name="stackGuardianContactStats">
+                <TextBlock FontSize="20" VerticalAlignment="Center"
+                    Margin="0,150,0,20"
+                    Width="300"
+                    Height="300"
+                    TextWrapping="Wrap"
+                    Text="Contact Frequency Statistics (% Guardians within last 6 months)"/>
+            </StackPanel>
+
+        </Grid>
+    </StackPanel>
+
+
+</Page>

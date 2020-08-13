@@ -1,0 +1,145 @@
+﻿<Page
+    x:Class="SMSDesktopUWP.Views.EditOrphanPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SMSDesktopUWP.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:editors="using:Syncfusion.UI.Xaml.Controls.Input"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="20" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+            <TextBlock
+                Margin="10,20,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource ListTitleStyle}"
+                Text="First Name" />
+            <TextBox
+                x:Name="txtFirstName"
+                Text="{x:Bind InOrphan.FirstName, Mode=TwoWay}"
+                Margin="10,0,0,20"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Width="300" />
+
+            <TextBlock
+                Margin="10,20,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource ListTitleStyle}"
+                Text="Middle Name" />
+            <TextBox
+                x:Name="txtMiddleName"
+                Text="{x:Bind InOrphan.MiddleName, Mode=TwoWay}"
+                Margin="10,0,0,20"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Width="300" />
+
+            <TextBlock
+                Margin="10,20,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource ListTitleStyle}"
+                Text="Last Name" />
+            <TextBox
+                x:Name="txtLastName"
+                Text="{x:Bind InOrphan.LastName, Mode=TwoWay}"
+                Margin="10,0,0,20"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Width="300" />
+            
+            <TextBlock
+                Margin="10,20,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource ListTitleStyle}"
+                Text="Gender" />
+            <TextBox
+                x:Name="txtGender"
+                Text="{x:Bind InOrphan.Gender, Mode=TwoWay}"
+                Margin="10,0,0,20"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Width="100" />
+
+            <TextBlock
+                Margin="10,20,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource ListTitleStyle}"
+                Text="Date of Birth" />
+            <CalendarDatePicker
+                Date="{x:Bind InOrphan.DateOfBirth}"
+                Margin="10,0,0,20"
+                Width="200"
+                x:Name="dtDateOfBirth" />
+
+            <TextBlock
+                Margin="10,20,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource ListTitleStyle}"
+                Text="LCM Status" />
+            <TextBox
+                x:Name="txtLCMStatus"
+                Text="{x:Bind InOrphan.LCMStatus, Mode=TwoWay}"
+                Margin="10,0,0,20"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Width="200" />
+
+            <TextBlock
+                Margin="10,20,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource ListTitleStyle}"
+                Text="Entry Date" />
+            <CalendarDatePicker
+                Date="{x:Bind InOrphan.EntryDate}"
+                Margin="10,0,0,20"
+                Width="200"
+                x:Name="dtEntryDate" />
+
+            <TextBlock
+                Margin="10,20,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource ListTitleStyle}"
+                Text="Guardian" />
+            <editors:SfTextBoxExt
+                Margin="10,0,0,20"
+                HorizontalAlignment="Left"
+                Foreground="Black"
+                Width="300"
+                AutoCompleteSource="{x:Bind GuardianItems}"
+                SearchItemPath="FullName"
+                AutoCompleteMode="SuggestAppend"
+                Text="{x:Bind InOrphan.Guardian.FullName}"
+                />
+
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    x:Name="btnSave"
+                    Margin="70,40, 0, 0"
+                    Width="100"
+                    Click="btnSave_Click"
+                    Content="Save" />
+                <Button
+                    x:Name="btnCancel"
+                    Margin="60,40,0,0"
+                    Width="100"
+                    Click="btnCancel_Click"
+                    Content="Cancel" />
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
+</Page>

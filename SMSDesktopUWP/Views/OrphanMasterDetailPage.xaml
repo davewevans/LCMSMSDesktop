@@ -1,0 +1,255 @@
+﻿<Page
+    x:Class="SMSDesktopUWP.Views.OrphanMasterDetailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Style="{StaticResource PageStyle}"
+    xmlns:model="using:SMSDesktopUWP.Core.Models"
+    xmlns:views="using:SMSDesktopUWP.Views"
+    xmlns:behaviors="using:SMSDesktopUWP.Behaviors"
+    behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
+    mc:Ignorable="d">
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition />
+        </TransitionCollection>
+    </Page.Transitions>
+    <Page.Resources>
+        
+        <DataTemplate x:Key="ItemTemplate" x:DataType="model:Orphan">
+            <Grid Height="60">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <FontIcon
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    FontSize="32"
+                    FontFamily="Segoe MDL2 Assets"
+                    Glyph="&#xE8D4;" />
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="{StaticResource SmallLeftMargin}"
+                    VerticalAlignment="Center">
+                    <TextBlock Text="{x:Bind FullName}" Style="{ThemeResource ListTitleStyle}" />
+                    <TextBlock Text="{x:Bind Gender}" Style="{StaticResource ListSubTitleStyle}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DetailsTemplate" x:DataType="model:Orphan">
+            <ScrollViewer>
+                <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <CommandBar DefaultLabelPosition="Right">
+                        <AppBarButton x:Name="btnAdd" Label="Add" Icon="Add" Click="btnAdd_Click_1"/>
+                        <AppBarButton x:Name="btnEdit" Label="Edit" Icon="Edit" Click="btnEdit_Click" />
+                        <AppBarButton x:Name="btnDelete" Label="Delete" Icon="Delete" Click="btnDelete_Click"/>
+                        <AppBarButton x:Name="btnPictures" Label="Pictures" Icon="Camera" Click="btnPictures_Click"/>
+                    </CommandBar>
+                    <views:OrphanMasterDetailDetailControl MasterMenuItem="{Binding}" />
+
+                    <controls:Expander x:Name="ExpNotes" VerticalAlignment="Top"
+                        Margin="{StaticResource SmallTopMargin}"
+                        Header="Narrations"
+                        HorizontalContentAlignment="Stretch"
+                        IsExpanded="False"
+                        ExpandDirection="Down">
+                        <StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Click="btnNotes_Click">
+                                        <StackPanel Orientation="Horizontal">
+                                            <FontIcon Margin="0,0,10,0"
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Glyph="&#xE710;" />
+                                            <TextBlock Text="Add"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="btnDeleteNote"
+                                    Click="btnDeleteNote_Click">
+                                        <StackPanel Orientation="Horizontal">
+                                            <FontIcon Margin="0,0,10,0"
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Glyph="&#xE74D;" />
+                                            <TextBlock Text="Delete"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <ListView x:Name="NotesListView" ItemsSource="{x:Bind Narrations, Mode=TwoWay}"
+                                  SelectionChanged="NotesListView_SelectionChanged"
+                                  DoubleTapped="NotesListView_DoubleTapped">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="model:Narration">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{x:Bind EntryDate.ToShortDateString()}" Margin="5,5,40,5" />
+                                            <TextBlock Text="{x:Bind Note}" Margin="5,5,40,5" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </controls:Expander>
+
+                    <controls:Expander x:Name="ExpAcademics" VerticalAlignment="Top"
+                        Margin="{StaticResource SmallTopMargin}"
+                        Header="Last Academic Record"
+                        HorizontalContentAlignment="Stretch"
+                        IsExpanded="False"
+                        ExpandDirection="Down">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Click="btnAcademics_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon Margin="0,0,10,0"
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Glyph="&#xE7BE;" />
+                                        <TextBlock Text="Add"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="btnDeleteAcademic"
+                                    Click="btnDeleteAcademic_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon Margin="0,0,10,0"
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Glyph="&#xE74D;" />
+                                        <TextBlock Text="Delete"/>
+                                    </StackPanel>
+                                </Button>
+
+                            </StackPanel>
+                            <ListView x:Name="AcademicListView"
+                                  ItemsSource="{x:Bind Academics}"
+                                  DoubleTapped="AcademicListView_DoubleTapped">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="model:Academic">
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <TextBlock Text="Grade:" Margin="5"/>
+                                            <TextBlock Text="{x:Bind Grade}" Margin="5,5,40,5" />
+
+                                            <TextBlock Text="School:" Margin="5" />
+                                            <TextBlock Text="{x:Bind School}" Margin="5,5,40,5" />
+
+                                            <TextBlock Text="KCPE:" Margin="5" />
+                                            <TextBlock Text="{x:Bind KCPE}" Margin="5,5,40,5" />
+
+                                            <TextBlock Text="KCSE:" Margin="5" />
+                                            <TextBlock Text="{x:Bind KCSE}" Margin="5,5,40,5" />
+
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+
+                    </controls:Expander>
+
+
+                    <controls:Expander x:Name="ExpPictures" VerticalAlignment="Top"
+                        Margin="{StaticResource SmallTopMargin}"
+                        Header="Last Picture"
+                        HorizontalContentAlignment="Stretch"
+                        IsExpanded="False"
+                        ExpandDirection="Down">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource DetailBodyStyle}"
+                           Margin="{StaticResource SmallTopMargin}"
+                           Text="Picture Entry Date" />
+                            <TextBlock Style="{StaticResource DetailBodyStyle}"
+                           Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis quis hendrerit nulla, vel molestie libero. In nec ultricies magna, ultricies molestie ipsum. Mauris non dignissim velit. Etiam malesuada blandit mauris eu maximus. Quisque ornare, felis nec scelerisque mollis, risus dolor posuere magna, in gravida quam mi id nisi. Nullam mattis consequat ex. Cras nulla neque, dictum ac urna et, vestibulum feugiat ex. Pellentesque malesuada accumsan ligula, vel fringilla lacus facilisis sit amet. Proin convallis tempor arcu, ac placerat libero pretium ut. Praesent hendrerit nisl at lobortis viverra. Fusce vitae velit odio. Nam ut tortor sed purus finibus sollicitudin quis at ante. Ut sodales dolor vel eros mollis suscipit. Donec eu nulla id urna ultricies consequat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;" />
+
+                            <FontIcon
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            FontSize="80"
+                            FontFamily="Segoe MDL2 Assets"
+                            Glyph="&#xE8D4;" />
+                        </StackPanel>
+                    </controls:Expander>
+
+                </StackPanel>
+            </ScrollViewer>
+        </DataTemplate>
+
+        <DataTemplate x:Key="NoSelectionContentTemplate">
+            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                <TextBlock
+                    x:Uid="OrphanMasterDetail_NoSelection"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    TextAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="MasterHeaderTemplate">
+            <StackPanel>
+                <TextBlock
+                    x:Name="headerText"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource ListTitleStyle}"
+                    Text="{Binding}" />
+
+                <AutoSuggestBox
+                    x:Name="txtAutoSuggest"
+                    PlaceholderText="Search orphan name"
+                    DisplayMemberPath="FullName"
+                    TextMemberPath="FullName"
+                    QueryIcon="Find"
+                    TextChanged="AutoSuggestionBox_TextChanged"
+                    QuerySubmitted="AutoSuggestBox_QuerySubmitted"
+                    SuggestionChosen="AutoSuggestBox_SuggestionChosen"
+                    Margin="0,5" />
+
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="MinimalMasterHeaderTemplate">
+            <Grid Height="40">
+                <TextBlock
+                    x:Name="headerText"
+                    Margin="96,0,0,0"
+                    Text="{Binding}"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource ListTitleStyle}" />
+            </Grid>
+        </DataTemplate>
+
+</Page.Resources>
+
+    <Grid x:Name="ContentArea">
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!--641 is the default CompactModeThresholdWidth in NavigationView -->
+                        <AdaptiveTrigger MinWindowWidth="641" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MasterDetailsViewControl.MasterHeaderTemplate" Value="{StaticResource MasterHeaderTemplate}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+        <controls:MasterDetailsView Grid.Row="1"
+        x:Name="MasterDetailsViewControl"
+        x:Uid="OrphanMasterDetail"
+        BackButtonBehavior="Automatic"
+        Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
+        BorderBrush="Transparent"
+        DetailsTemplate="{StaticResource DetailsTemplate}"
+        ItemsSource="{x:Bind OrphanItems}"
+        ItemTemplate="{StaticResource ItemTemplate}"
+        MasterHeaderTemplate="{StaticResource MinimalMasterHeaderTemplate}"
+        NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
+        SelectedItem="{x:Bind Selected, Mode=TwoWay}" />
+
+    </Grid>
+</Page>

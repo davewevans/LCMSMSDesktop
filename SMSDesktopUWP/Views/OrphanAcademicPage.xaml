@@ -1,0 +1,94 @@
+﻿<Page
+    x:Class="SMSDesktopUWP.Views.OrphanAcademicPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SMSDesktopUWP.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+
+    <StackPanel Name="block" Padding="0,15,0,0">
+        <TextBlock Text="{x:Bind InOrphan.FullName}"
+                            FontSize="20"/>
+        <TextBlock Text="Orphan"
+                            FontSize="10"
+                            Margin="5,5,0,5" />
+
+        <TextBlock
+                Margin="{StaticResource SmallTopMargin}"
+                Style="{StaticResource DetailSubTitleStyle}"
+                Text="Entry date" />
+        <CalendarDatePicker
+                    Date="{x:Bind InAcademic.EntryDate}"
+                    Margin="10,0,0,20"
+                    Width="200"
+                    x:Name="dtEntryDate" />
+
+        <TextBlock
+                Margin="{StaticResource SmallTopMargin}"
+                Style="{StaticResource DetailSubTitleStyle}"
+                Text="Grade" />
+        <TextBox
+                    x:Name="txtGrade"
+                    Text="{x:Bind InAcademic.Grade, Mode=TwoWay}"
+                    Margin="10,0,0,20"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    Width="100" />
+
+        <TextBlock
+                Margin="{StaticResource SmallTopMargin}"
+                Style="{StaticResource DetailSubTitleStyle}"
+                Text="School" />
+        <TextBox
+                    x:Name="txtSchool"
+                    Text="{x:Bind InAcademic.School, Mode=TwoWay}"
+                    Margin="10,0,0,20"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    Width="100" />
+        
+        <TextBlock
+                Margin="{StaticResource SmallTopMargin}"
+                Style="{StaticResource DetailSubTitleStyle}"
+                Text="KCPE" />
+        <TextBox
+                    x:Name="txtKCPE"
+                    Text="{x:Bind InAcademic.KCPE, Mode=TwoWay}"
+                    Margin="10,0,0,20"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    Width="100" />
+
+        <TextBlock
+                Margin="{StaticResource SmallTopMargin}"
+                Style="{StaticResource DetailSubTitleStyle}"
+                Text="KCSE" />
+        <TextBox
+                    x:Name="txtKCSE"
+                    Text="{x:Bind InAcademic.KCSE, Mode=TwoWay}"
+                    Margin="10,0,0,20"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    Width="100" />
+
+        <StackPanel Orientation="Horizontal">
+            <Button
+                            x:Name="btnSave"
+                            Margin="70,40, 0, 0"
+                            Width="100"
+                            Click="btnSave_Click"
+                            Content="Save" />
+            <Button
+                            x:Name="btnCancel"
+                            Margin="60,40,0,0"
+                            Width="100"
+                            Click="btnCancel_Click"
+                            Content="Cancel" />
+        </StackPanel>
+
+    </StackPanel>
+
+</Page>
