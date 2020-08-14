@@ -51,5 +51,19 @@ namespace SMSDesktopUWP.Core.Models
                 return (int)Math.Floor((DateTime.Now - this.DateOfBirth).TotalDays / 365.242199);
             }
         }
+
+
+        //
+        // Added by Dave
+        //
+
+        public string ProfilePicUri { get; set; }
+
+        public Picture ProfilePic { get; set; }
+
+        public List<Sponsor> Sponsors { get; set; }
+
+        public List<Picture> Pictures { get; set; }
+
     }
 }

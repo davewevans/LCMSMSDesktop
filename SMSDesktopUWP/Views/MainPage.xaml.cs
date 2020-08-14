@@ -12,6 +12,8 @@ using Syncfusion.UI.Xaml.Gauges;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
 using Windows.Foundation;
+using Windows.System;
+using System.Configuration;
 
 namespace SMSDesktopUWP.Views
 {

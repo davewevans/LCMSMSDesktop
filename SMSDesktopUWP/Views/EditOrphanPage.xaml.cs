@@ -1,4 +1,5 @@
 ﻿using ColorCode.Common;
+using SMSDesktopUWP.Core.HttpRepository;
 using SMSDesktopUWP.Core.Models;
 using SMSDesktopUWP.Core.Services;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -104,7 +106,7 @@ namespace SMSDesktopUWP.Views
             args.Handled = true;
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        private async void btnSave_Click(object sender, RoutedEventArgs e)
         {
             Orphan outOrphan = new Orphan();
 
@@ -133,15 +135,64 @@ namespace SMSDesktopUWP.Views
 
             if (isNew)
             {
-                // Update to Database
-                OrphanDataService.AddOrphan(outOrphan);
+                if (AppSettings.UseWebApi)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        var orphanRepo = new OrphanHttpRepository(client);
+                        var orphanCreation = new OrphanCreation
+                        {
+                            FirstName = outOrphan.FirstName,
+                            MiddleName = outOrphan.MiddleName,
+                            LastName = outOrphan.LastName,                            
+                            Gender = outOrphan.Gender,
+                            DateOfBirth = outOrphan.DateOfBirth,
+                            LCMStatus = outOrphan.LCMStatus,
+                            ProfileNumber = outOrphan.ProfileNumber
+                        };
+
+                        await orphanRepo.AddOrphanAsync(orphanCreation);
+                    }
+                }
+                else
+                {
+                    // Update to Database
+                    OrphanDataService.AddOrphan(outOrphan);
+                }                
             }
             else
             {
                 // Go get the one of interest, then overwrite.
 
-                // Update to Database
-                OrphanDataService.SaveOrphan(outOrphan);
+                if (AppSettings.UseWebApi)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        var orphanRepo = new OrphanHttpRepository(client);
+                        var orphanEdit = new OrphanEdit
+                        {
+                            FirstName = outOrphan.FirstName,
+                            MiddleName = outOrphan.MiddleName,
+                            LastName = outOrphan.LastName,
+                            Gender = outOrphan.Gender,
+                            DateOfBirth = outOrphan.DateOfBirth,
+                            LCMStatus = outOrphan.LCMStatus,
+                            ProfileNumber = outOrphan.ProfileNumber,
+                            EntryDate = outOrphan.EntryDate,
+                            GuardianID = outOrphan.GuardianID,
+                            ProfilePictureID = outOrphan.ProfilePic.PictureID
+
+                        };
+
+                        await orphanRepo.UpdateOrphanAsync(outOrphan.OrphanID, orphanEdit);
+                    }
+                }
+                else
+                {
+                    // Update to Database
+                    OrphanDataService.SaveOrphan(outOrphan);
+                }
+                
 
             }
 

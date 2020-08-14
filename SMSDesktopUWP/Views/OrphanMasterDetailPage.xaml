@@ -24,12 +24,15 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <FontIcon
+                <!--<FontIcon
                     Grid.Column="0"
                     VerticalAlignment="Center"
                     FontSize="32"
                     FontFamily="Segoe MDL2 Assets"
-                    Glyph="&#xE8D4;" />
+                    Glyph="&#xE8D4;" />-->
+
+                <Image Source="{x:Bind ProfilePicUri, Mode=OneWay}" Width="100px" Height="100px" HorizontalAlignment="Left" />
+                
                 <StackPanel
                     Grid.Column="1"
                     Margin="{StaticResource SmallLeftMargin}"

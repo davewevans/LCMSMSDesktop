@@ -1,7 +1,12 @@
 ﻿using System;
-
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+using SMSDesktopUWP.Core.HttpRepository;
 using SMSDesktopUWP.Core.Models;
 using SMSDesktopUWP.Core.Services;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -44,6 +49,49 @@ namespace SMSDesktopUWP.Views
         {
             //((Frame)Window.Current.Content).Navigate(typeof(Views.NewOrphanPage));
             OnNavigateParentReady(this, null);
+        }
+
+        private async void UploadPicOnClick(object sender, RoutedEventArgs e)
+        {
+            await UploadPicAsync();
+        }
+
+        private async Task UploadPicAsync()
+        {
+            var picker = new FileOpenPicker();
+
+            picker.ViewMode = PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+
+            picker.FileTypeFilter.Add(".jpg");
+            picker.FileTypeFilter.Add(".jpeg");
+            picker.FileTypeFilter.Add(".png");
+            picker.FileTypeFilter.Add(".gif");
+
+            StorageFile file = await picker.PickSingleFileAsync();
+
+            if (file == null) return;
+
+            using (var client = new HttpClient())
+            using (var fileStream = await file.OpenReadAsync())
+            {
+                var pictureCreation = new PictureCreation
+                {
+                    PictureFileName = file.Name,
+                    Caption = string.Empty,
+                    SetAsProfilePic = true,
+                    OrphanID = MasterMenuItem.OrphanID
+                };
+
+                var picRepository = new PictureHttpRepository(client);
+                await picRepository.UploadImageAsync(pictureCreation, fileStream.AsStreamForRead());
+
+            }
+        }
+
+        private async void Image_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            await UploadPicAsync();
         }
     }
 }

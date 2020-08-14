@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Microsoft.Toolkit.Uwp.UI.Triggers;
+using SMSDesktopUWP.Core.HttpRepository;
 using SMSDesktopUWP.Core.Models;
 using SMSDesktopUWP.Core.Services;
 
@@ -53,14 +55,7 @@ namespace SMSDesktopUWP.Views
 
         private async void OrphanMasterDetailPage_Loaded(object sender, RoutedEventArgs e)
         {
-            OrphanItems.Clear();
-
-            var data = await OrphanDataService.AllOrphans();
-
-            foreach (var item in data)
-            {
-                OrphanItems.Add(item);
-            }
+            await LoadOrphansAsync();
 
             if (MasterDetailsViewControl.ViewState == MasterDetailsViewState.Both)
             {
@@ -68,13 +63,37 @@ namespace SMSDesktopUWP.Views
             }
         }
 
-        private async void LoadOrphans()
+        private async Task LoadOrphansAsync()
         {
             //SampleItems.Clear();
             OrphanItems.Clear();
 
+            IEnumerable<Orphan> data;
+
+            //
+            // Use Web API or db directly
+            //
+            if (AppSettings.UseWebApi)
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var orphanRepo = new OrphanHttpRepository(client);
+                    var parameters = new OrphanParametes
+                    {
+                        PageNumber = 1,
+                        PageSize = 1000
+                    };
+                    var response = await orphanRepo.GetOrphansAsync(parameters);
+                    data = response.Orphans.AsEnumerable();
+                }
+            }
+            else
+            {
+                data = await OrphanDataService.AllOrphans();
+            }
+
             //var data = await SampleDataService.GetMasterDetailDataAsync();
-            var data = await OrphanDataService.AllOrphans();
+            //var data = await OrphanDataService.AllOrphans();
 
             foreach (var item in data)
             {
@@ -202,7 +221,7 @@ namespace SMSDesktopUWP.Views
                     // Can't get to it because it's inside a data template!
 
                     // Repopulate the list
-                    LoadOrphans();
+                    LoadOrphansAsync();
                 }
                 else
                 {
@@ -228,7 +247,7 @@ namespace SMSDesktopUWP.Views
 
             await contentAcademic.ShowAsync();
 
-            LoadOrphans();
+            LoadOrphansAsync();
         }
 
         private async void btnNotes_Click(object sender, RoutedEventArgs e)
@@ -249,7 +268,7 @@ namespace SMSDesktopUWP.Views
             await contentNarration.ShowAsync();
 
             //LoadNarrationItems();
-            LoadOrphans();
+            LoadOrphansAsync();
         }
 
         private void btnPictures_Click(object sender, RoutedEventArgs e)
@@ -330,7 +349,7 @@ namespace SMSDesktopUWP.Views
                     NarrationDataService.DeleteNarration(selectedNote);
 
                     // Somehow update the display
-                    LoadOrphans();
+                    LoadOrphansAsync();
                 }
                 else
                 {
@@ -366,7 +385,7 @@ namespace SMSDesktopUWP.Views
                     AcademicDataService.DeleteAcademic(selectedAcademic);
 
                     // Somehow update the display
-                    LoadOrphans();
+                    LoadOrphansAsync();
                 }
                 else
                 {
