@@ -1,9 +1,11 @@
-﻿using SMSDesktopUWP.Core.Models;
+﻿using SMSDesktopUWP.Core.HttpRepository;
+using SMSDesktopUWP.Core.Models;
 using SMSDesktopUWP.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -59,7 +61,7 @@ namespace SMSDesktopUWP.Views
             OrphanMasterDetailPage.contentNarration.Hide();
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        private async void btnSave_Click(object sender, RoutedEventArgs e)
         {
             Narration outNarration = new Narration();
 
@@ -81,15 +83,58 @@ namespace SMSDesktopUWP.Views
 
             if (isNew)
             {
-                // Update to Database
-                NarrationDataService.AddNarration(outNarration);
+
+                if (AppSettings.UseWebApi)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        var narrationRepo = new NarrationHttpRepository(client);
+                        var newNarration = new NarrationCreation
+                        {
+                            OrphanID = outNarration.OrphanID,
+                            Subject = outNarration.Subject,
+                            Note = outNarration.Note,
+                            EntryDate = outNarration.EntryDate
+                        };
+
+                        await narrationRepo.AddNarrationAsync(newNarration);
+                    }
+                }
+                else
+                {
+                    // Update to Database
+                    NarrationDataService.AddNarration(outNarration);
+                }
+
+               
             }
             else
             {
                 // Go get the one of interest, then overwrite.
 
-                // Update to Database
-                NarrationDataService.SaveNarration(InOrphan.OrphanID, outNarration);
+                if (AppSettings.UseWebApi)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        var narrationRepo = new NarrationHttpRepository(client);
+                        var narrationUpdate = new NarrationUpdate
+                        {
+                            OrphanID = outNarration.OrphanID,
+                            Subject = outNarration.Subject,
+                            Note = outNarration.Note,
+                            EntryDate = outNarration.EntryDate
+                        };
+
+                        await narrationRepo.UpdateNarrationAsync(outNarration.NarrationID, narrationUpdate);
+                    }
+                }
+                else
+                {
+                    // Update to Database
+                    NarrationDataService.SaveNarration(InOrphan.OrphanID, outNarration);
+                }
+
+                
 
             }
 

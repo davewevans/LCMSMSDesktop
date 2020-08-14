@@ -214,8 +214,21 @@ namespace SMSDesktopUWP.Views
                 ContentDialogResult result = await notifyDelete.ShowAsync();
                 if (result == ContentDialogResult.Primary)
                 {
-                    // Delete
-                    OrphanDataService.DeleteOrphan(Selected);
+
+                    if (AppSettings.UseWebApi)
+                    {
+                        using (var client = new HttpClient())
+                        {
+                            var orphanRepo = new OrphanHttpRepository(client);
+                            await orphanRepo.DeleteOrphanAsync(Selected.OrphanID);
+                        }
+                    }
+                    else
+                    {
+                        // Delete
+                        OrphanDataService.DeleteOrphan(Selected);
+                    }
+                   
 
                     // Clear search text box
                     // Can't get to it because it's inside a data template!
