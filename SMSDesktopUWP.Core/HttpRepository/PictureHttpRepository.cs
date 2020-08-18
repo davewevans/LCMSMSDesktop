@@ -74,6 +74,20 @@ namespace SMSDesktopUWP.Core.HttpRepository
         //
         // Used for demo only. 
         //
+        public async Task<List<OrphanProfilePic>> GetOrphanPicUrls()
+        {
+            string url = $"{ HttpRepositorySettings.BaseApiUrl }/{ "UWPPicturesDemo" }";
+
+            var response = await _client.GetAsync(url);
+
+            var content = await response.Content.ReadAsStringAsync();
+            var orphanPicUrls = JsonSerializer.Deserialize<List<OrphanProfilePic>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return orphanPicUrls;
+        }
+
+        //
+        // Used for demo only. 
+        //
         public async Task<string> GetOrphanPicUrl(int orphanId)
         {
             string url = $"{ HttpRepositorySettings.BaseApiUrl }/{ "UWPPicturesDemo" }/{ orphanId }";

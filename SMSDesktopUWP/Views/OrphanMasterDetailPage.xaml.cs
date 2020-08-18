@@ -93,9 +93,15 @@ namespace SMSDesktopUWP.Views
                 using (HttpClient client = new HttpClient())
                 {
                     var orphanRepo = new PictureHttpRepository(client);
-                    foreach (var item in data)
+                    var picUrls = await orphanRepo.GetOrphanPicUrls();
+
+                    foreach (var item in picUrls)
                     {
-                        item.ProfilePicUri = await orphanRepo.GetOrphanPicUrl(item.OrphanID);
+                        var orphan = data.FirstOrDefault(x => x.OrphanID == item.OrphanID);
+                        if (orphan != null)
+                        {
+                            orphan.ProfilePicUri = item.PicUrl;
+                        }                  
                     }
                 }
               
