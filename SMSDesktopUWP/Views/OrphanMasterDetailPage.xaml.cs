@@ -43,7 +43,6 @@ namespace SMSDesktopUWP.Views
         }
 
         public ObservableCollection<Orphan> OrphanItems { get; private set; } = new ObservableCollection<Orphan>();
-
         public ObservableCollection<Narration> NarrationItems { get; private set; } = new ObservableCollection<Narration>();
         public ObservableCollection<Academic> AcademicItems { get; private set; } = new ObservableCollection<Academic>();
 
@@ -90,6 +89,16 @@ namespace SMSDesktopUWP.Views
             else
             {
                 data = await OrphanDataService.AllOrphans();
+
+                using (HttpClient client = new HttpClient())
+                {
+                    var orphanRepo = new PictureHttpRepository(client);
+                    foreach (var item in data)
+                    {
+                        item.ProfilePicUri = await orphanRepo.GetOrphanPicUrl(item.OrphanID);
+                    }
+                }
+              
             }
 
             //var data = await SampleDataService.GetMasterDetailDataAsync();

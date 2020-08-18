@@ -84,8 +84,22 @@ namespace SMSDesktopUWP.Views
                 };
 
                 var picRepository = new PictureHttpRepository(client);
-                await picRepository.UploadImageAsync(pictureCreation, fileStream.AsStreamForRead());
 
+                if (AppSettings.UseWebApi)
+                {
+                    MasterMenuItem.ProfilePicUri = await picRepository.UploadImageAsync(pictureCreation, fileStream.AsStreamForRead());
+                    //
+                    // TODO re-render the view
+                    //
+                }
+                else // Direct to db
+                {
+                    MasterMenuItem.ProfilePicUri = await picRepository.UploadImageDemoAsync(pictureCreation, fileStream.AsStreamForRead());
+                    //
+                    // TODO re-render the view
+                    //
+
+                }
             }
         }
 

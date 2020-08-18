@@ -43,5 +43,42 @@ namespace SMSDesktopUWP.Core.HttpRepository
             }
             return null;
         }
+
+
+        //
+        // Used for demo only.
+        //
+        public async Task<string> UploadImageDemoAsync(PictureCreation picCreation, Stream fileStream)
+        {
+            string url = $"{ HttpRepositorySettings.BaseApiUrl }/{ "UWPPicturesDemo" }";
+
+            // Create the content
+            var content = new MultipartFormDataContent();
+            content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
+
+            var jsonData = JsonSerializer.Serialize<PictureCreation>(picCreation, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            content.Add(new StringContent(jsonData, Encoding.UTF8, "application/json"));
+
+            content.Add(new StreamContent(fileStream, (int)fileStream.Length), "image", picCreation.PictureFileName);
+
+
+            var response = await _client.PostAsync(url, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            return null;
+        }
+
+        //
+        // Used for demo only. 
+        //
+        public async Task<string> GetOrphanPicUrl(int orphanId)
+        {
+            string url = $"{ HttpRepositorySettings.BaseApiUrl }/{ "UWPPicturesDemo" }/{ orphanId }";
+
+            return await _client.GetStringAsync(url);
+        }
     }
 }
