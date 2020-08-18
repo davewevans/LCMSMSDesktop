@@ -57,8 +57,10 @@ namespace SMSDesktopUWP.Core.Models
         // Added by Dave
         //
 
-        public string ProfilePicUri { get; set; }
+        [NotMapped]
+        public string ProfilePicUri { get; set; } = "https://lcmsmsphotostorage.blob.core.windows.net/lcmsmsblobdemo/no_image_found_300x300.jpg";
 
+        [NotMapped]
         public Picture ProfilePic { get; set; }
 
         public List<Sponsor> Sponsors { get; set; }

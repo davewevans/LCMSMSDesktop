@@ -112,6 +112,8 @@ namespace SMSDesktopUWP.Views
 
         private void LoadNarrationItems()
         {
+            if (Selected == null) return;
+
             foreach (var nar in Selected.Narrations)
             {
                 NarrationItems.Add(nar);
@@ -120,6 +122,8 @@ namespace SMSDesktopUWP.Views
 
         private void LoadAcademicItems()
         {
+            if (Selected == null) return;
+
             foreach (var aca in Selected.Academics)
             {
                 AcademicItems.Add(aca);
