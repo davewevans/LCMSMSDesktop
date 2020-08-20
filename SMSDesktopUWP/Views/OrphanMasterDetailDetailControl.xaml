@@ -30,7 +30,7 @@
                     Text="{x:Bind MasterMenuItem.FullName, Mode=OneWay}"
                     Style="{ThemeResource TitleTextBlockStyle}" />
 
-                <Image Source="{x:Bind MasterMenuItem.ProfilePicUri, Mode=OneWay}" Width="300px" Height="AUTO" HorizontalAlignment="Left" Tapped="Image_Tapped" />
+                <Image Name="imgProfilePic" Source="{x:Bind MasterMenuItem.ProfilePicUri, Mode=OneWay}" Width="300px" Height="AUTO" HorizontalAlignment="Left" Tapped="Image_Tapped" />
 
                 <Button x:Name="btnUploadPic" Content="Upload Picture" Click="UploadPicOnClick" />
 

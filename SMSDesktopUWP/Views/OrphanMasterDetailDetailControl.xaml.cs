@@ -7,8 +7,11 @@ using SMSDesktopUWP.Core.Models;
 using SMSDesktopUWP.Core.Services;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMSDesktopUWP.Views
 {
@@ -91,6 +94,9 @@ namespace SMSDesktopUWP.Views
                     //
                     // TODO re-render the view
                     //
+                    Uri uri = new Uri(MasterMenuItem.ProfilePicUri);
+                    BitmapImage img = new BitmapImage(uri);
+                    imgProfilePic.Source = img;
                 }
                 else // Direct to db
                 {
@@ -98,7 +104,9 @@ namespace SMSDesktopUWP.Views
                     //
                     // TODO re-render the view
                     //
-
+                    Uri uri = new Uri(MasterMenuItem.ProfilePicUri);
+                    BitmapImage img = new BitmapImage(uri);
+                    imgProfilePic.Source = img;
                 }
             }
         }
